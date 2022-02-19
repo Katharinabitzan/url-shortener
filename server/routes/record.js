@@ -1,42 +1,63 @@
 const express = require("express");
 const Url = require('../models/url.js');
-
-
-// The router will be added as a middleware and will take control of requests starting with path /record.
 const recordRoutes = express.Router();
-
-// This will help us connect to the database
 const dbo = require("../db/conn");
 
-// This help convert the id from string to ObjectId for the _id.
+// Help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-
-//This section will load up the Homepage - Form to Input
+// Load up the Homepage - Form to Input
 recordRoutes.route('/').get(function(req, res) {
-  console.log("this is when formview should render")
+  console.log("rendering form now")
   res.render('form');
+})
+
+// Get form re-submission
+recordRoutes.route('/resubmit/').get(function(req, res){
+  console.log("form resubmitted")
+  res.render('form_resubmit');
 })
 
 // On form submission
 recordRoutes.route('/').post(function(req, res){
 
-  const url = new Url(req.body.originalurl, req.body.identifier)
-  console.log(req.body)
-  console.log(req.body.originalurl)
-  console.log(req.body.identifier)
-  validUrl = url.validateInputUrl()
+  let db = dbo.getDb()
+  let cursor = db.collection("urls").find({ "url_identifier": req.body.identifier})
 
-  if (validUrl == true) {
-    url.addUrlToDb()
-    console.log("url added to db")
-    res.send(`Thank you for submitting your URL to shorten! The URL you submitted is: ${req.body.originalurl} You can access your URL: Here: `)
-    identifierUnique = url.identifierUnique()
+  const resultsArray = cursor.toArray().then(results => {
+    console.log("results are: " + results)
+    console.log("for each result print result: ")
+    results.forEach(result => {
+      console.log(result)
+    })
 
-  }
-  else {
-    res.send(`Please enter a valid URL !`)
-  }
+    console.log("This will only print after the for each")
+
+    const url = new Url(req.body.originalurl, req.body.identifier)
+    let validUrl = url.validateInputUrl()
+  
+      if (validUrl == true && results.length > 0) {
+        console.log(results.length)
+        console.log(validUrl)
+        console.log("identifier is: " + req.body.identifier)
+        console.log("identifier is not unique, next step resubmit")
+        res.render('form_resubmit');
+      }  
+      else if (validUrl != true && results.length > 0) {
+        console.log(results.length)
+        console.log(validUrl)
+        console.log("identifier is not unique, and not valid")
+        res.send(`Please enter a valid and unique URL !`)
+      }
+      else {
+        console.log(results.length)
+        console.log(validUrl)
+        console.log("identifier is unique, aadding to DB")
+        url.addUrlToDb()
+        console.log("url added to db")
+        res.send(`Thank you for submitting your URL to shorten! The URL you submitted is: ${req.body.originalurl} You can access your URL: Here: http://localhost:3000/identifier/${req.body.identifier}`)
+      }
+  })
 })
 
 // This section will help you get a list of all the records.
@@ -109,12 +130,32 @@ recordRoutes.route("/:id").delete((req, response) => {
 });
 
 // Redirect for all other requests
-recordRoutes.route('/*').get(function(req, res) {
-  let url = req.url.substring(1)
-  console.log(url)
-
+recordRoutes.route('/identifier/:id').get( async function(req, res) {
+  const identifier = req.params.id
+  console.log("this is the identifier: " + identifier)
+  console.log("Next step.. check if it exists in DB ")
  // res.send('This should redirect somewhere eventually IF that page is found')
-  res.redirect('http://google.com')
+
+ const db = dbo.getDb()
+ const cursor = await db.collection("urls").find({ "url_identifier": identifier})
+  const resultsArray = await cursor.toArray()
+  res.redirect(resultsArray[0].url_original)
+
+  
+//  const resultsArray = cursor.toArray().then(results => {
+//    console.log(`results are: ${JSON.stringify(results, null, 2)}`)
+//    console.log("for each result print result: ")
+//   //  results.forEach(result => {
+//   //    console.log(result)
+//   //    console.log(result.url_original)
+//   //  })
+
+//    console.log("This will only print after the for each, redirect after this")
+//    console.log(results[0].url_original)
+  
+//   }).then(results => {
+//     res.redirect(results[0].url_original)
+//   })
 })
 
 module.exports = recordRoutes;
