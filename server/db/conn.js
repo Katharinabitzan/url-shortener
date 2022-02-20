@@ -11,7 +11,7 @@ let dbConnection;
 module.exports = {
   connectToServer: function (callback) {
     client.connect(function (err, db) {
-      // Verify we got a good "db" object
+      // Verify we received a good "db" object
       if (db)
       {
         dbConnection = db.db("urls");
