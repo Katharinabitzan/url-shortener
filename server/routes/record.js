@@ -7,14 +7,19 @@ let url = new Url();
 // Help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-// Load up the Homepage - Form to Input
+// Load up the Homepage
 recordRoutes.route('/').get(function(req, res) {
   res.render('index');
 })
 
-// Load up the Homepage - Form to Input
+// Load up the Form 
 recordRoutes.route('/url').get(function(req, res) {
   res.render('form');
+})
+
+// About Page
+recordRoutes.route('/about').get(function(req, res) {
+  res.render('about');
 })
 
 // On form submission
