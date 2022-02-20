@@ -9,17 +9,16 @@ const ObjectId = require("mongodb").ObjectId;
 
 // Load up the Homepage - Form to Input
 recordRoutes.route('/').get(function(req, res) {
+  res.render('index');
+})
+
+// Load up the Homepage - Form to Input
+recordRoutes.route('/url').get(function(req, res) {
   res.render('form');
 })
 
-// Get form re-submission
-recordRoutes.route('/resubmit/').get(function(req, res){
-  console.log("form resubmitted")
-  res.render('form_resubmit');
-})
-
 // On form submission
-recordRoutes.route('/').post(async function(req, res){
+recordRoutes.route('/url').post(async function(req, res){
 
   let identifier
   if (req.body.identifier.length > 0 && req.body.identifier.length !== undefined) {
@@ -37,11 +36,18 @@ recordRoutes.route('/').post(async function(req, res){
     url.setOriginalUrl(req.body.originalurl)
     url.setIdentifier(identifier)
     let validUrl = url.validateInputUrl()
+    console.log(validUrl)
   
       if (validUrl === true && results.length > 0) {
+        console.log("valid but taken")
         res.render('form_resubmit');
       }  
       else if (validUrl !== true && results.length > 0) {
+        console.log("url invalid")
+        res.render('form_resubmit');
+      }
+      else if (validUrl !== true) {
+        console.log("url invalid")
         res.render('form_resubmit');
       }
       else {
@@ -51,8 +57,30 @@ recordRoutes.route('/').post(async function(req, res){
   })
 })
 
+// Get form re-submission
+recordRoutes.route('/resubmit').get(function(req, res){
+  console.log("form resubmitted")
+  res.render('form_resubmit');
+})
+
+// Get form to delete a tinyURL
+recordRoutes.route('/url_delete').get(function(req, res){
+  res.render('form_delete');
+})
+
+// Post form to delete a tinyURL
+recordRoutes.route('/url_delete').post(function(req, res){
+
+  const tinyUrl = req.body.tinyurl
+  const identifier = tinyUrl.split("/").pop()
+  console.log(identifier)
+  const db = dbo.getDb();
+  db.collection("urls").deleteOne({"url_identifier": identifier})
+  res.send(`Your tinyURL ${tinyUrl} has been successfully deleted and can be re-assigned`);
+})
+
 // Get a list of all the records.
-recordRoutes.route("/url").get(function (req, res) {
+recordRoutes.route("/urls").get(function (req, res) {
   let db_connect = dbo.getDb("urls_hub");
   db_connect
     .collection("urls")
@@ -71,7 +99,6 @@ recordRoutes.route("/url/:identifier").get(async function (req, res) {
   const resultsArray = await cursor.toArray()
   res.json(resultsArray)
 });
-
 
 // Create a new record.
 recordRoutes.route("/url/add").post(function (req, response) {
@@ -124,7 +151,13 @@ recordRoutes.route('/identifier/:identifier').get( async function(req, res) {
   const db = dbo.getDb()
   const cursor = await db.collection("urls").find({ "url_identifier": identifier})
   const resultsArray = await cursor.toArray()
-  res.redirect(resultsArray[0].url_original)
+  if (!resultsArray[0]) {
+    res.send(`Your tinyUrl: http://localhost:3000/identifier/${identifier} doesnt seem to go anywhere!`)
+  }
+  else if (resultsArray[0].url_original) {
+    res.redirect(resultsArray[0].url_original)
+  }
+  
 })
 
 module.exports = recordRoutes;

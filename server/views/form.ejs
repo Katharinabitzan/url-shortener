@@ -6,9 +6,9 @@
   </head>
   <body>
     <p>This is my page</p>
-    <form action="/" method="post">
-        <label for="originalurl">URL you would like to convert:</label><br>
-        <input type="text" id="originalurl" name="originalurl"><br>
+    <form action="/url" method="post">
+        <label for="originalurl">URL you would like to convert below. Required format example = https://google.com or http://google.com</label><br>
+        <input type="url" id="originalurl" name="originalurl" placeholder="https://example.com" pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?" required><br>
         <label for="identifier">Optional identifier for your URL:</label><br>
         <input type="text" id="identifier" name="identifier"><br>
         <input type="submit" value="Submit">
