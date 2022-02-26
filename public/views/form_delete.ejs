@@ -2,20 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Form to Delete</title>
+    <title>Node URL Shortener - Delete Page</title>
+    <meta name="description" content="LittleURL is a webpage which can be used to shorten Long URLs. Please type in the URL that you would like to shorten as well as an optional identifier for your URL and you can create a small URL.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <base href="/">
   </head>
   <body>
     <nav>
-      <ul>
-          <li><a href="http://localhost:3000/">Home</a></li>
-          <li><a href="http://localhost:3000/about">About</a></li>
-      </ul>
-  </nav>
-    <p>Use this page to delete a previously shortened URL</p>
-    <form action="/url_delete" method="post">
-        <label for="tinyurl">Tiny url you would like to delete:</label><br>
-        <input type="text" id="tinyurl" name="tinyurl"><br>
-        <input type="submit" value="Delete">
-    </form>
+      <div id="logo">
+        <a href="http://localhost:3000/">
+          <img src="smallURL_logo.png" alt="alernate text" width="50px" height="50px">
+        </a>
+      </div>
+    </nav>
+    <section id="urlbox">
+      <h1>Enter the ID of the URL you would like to delete:</h1>
+      <form action="/url_delete" method="post">
+        <div id="formurl">
+          <input type="text" id="tinyurl" name="tinyurl" placeholder="https://example.com" required>
+          <div id="formbutton">
+            <input type="submit" value="Delete">
+          </div>
+        </div>
+      </form>
+    </section>
   </body>
 </html>

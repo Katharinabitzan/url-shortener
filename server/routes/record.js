@@ -17,11 +17,6 @@ recordRoutes.route('/url').get(function(req, res) {
   res.render('form');
 })
 
-// About Page
-recordRoutes.route('/about').get(function(req, res) {
-  res.render('about');
-})
-
 // On form submission
 recordRoutes.route('/url').post(async function(req, res){
 
@@ -41,7 +36,6 @@ recordRoutes.route('/url').post(async function(req, res){
     url.setOriginalUrl(req.body.originalurl)
     url.setIdentifier(identifier)
     let validUrl = url.validateInputUrl()
-    console.log(validUrl)
   
       if (validUrl === true && results.length > 0) {
         console.log("valid but taken")
@@ -78,7 +72,6 @@ recordRoutes.route('/url_delete').post(function(req, res){
 
   const tinyUrl = req.body.tinyurl
   const identifier = tinyUrl.split("/").pop()
-  console.log(identifier)
   const db = dbo.getDb();
   db.collection("urls").deleteOne({"url_identifier": identifier})
   res.send(`Your tinyURL ${tinyUrl} has been successfully deleted and can be re-assigned`);
@@ -145,7 +138,6 @@ recordRoutes.route("/:id").delete((req, response) => {
   const myquery = { _id: ObjectId( req.params.id )};
   db.collection("urls").deleteOne(myquery, function (err, obj) {
     if (err) throw err;
-    console.log("1 url deleted");
     response.status(obj);
   });
 });
