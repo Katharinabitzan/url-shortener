@@ -35,11 +35,12 @@ recordRoutes.route('/url').post(async function(req, res){
     
     url.setOriginalUrl(req.body.originalurl)
     url.setIdentifier(identifier)
+    url.setClickcount()
     let validUrl = url.validateInputUrl()
   
       if (validUrl === true && results.length > 0) {
         console.log("valid but taken")
-        res.render('form_resubmit');
+        res.render('form_resubmit', { identifier: `${identifier}`});
       }  
       else if (validUrl !== true && results.length > 0) {
         console.log("url invalid")
@@ -152,6 +153,12 @@ recordRoutes.route('/identifier/:identifier').get( async function(req, res) {
     res.send(`Your tinyUrl: http://localhost:3000/identifier/${identifier} doesnt seem to go anywhere!`)
   }
   else if (resultsArray[0].url_original) {
+    // Update click count +1
+    // db
+    // .collection("urls")
+    // .updateOne({"url_identifier": identifier}, newvalues, function (err, res) {
+    //   if (err) throw err;
+    //   console.log("1 url updated");
     res.redirect(resultsArray[0].url_original)
   }
   

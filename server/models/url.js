@@ -13,6 +13,10 @@ class Url {
         this.identifier = identifier
     }
 
+    setClickcount() {
+        this.clickcount = 0
+    }
+
     validateInputUrl() {    
         const httpRegex = /^http:\/\//
         const httpsRegex = /^https:\/\//
@@ -45,7 +49,8 @@ class Url {
         const db = getDb()
         let myobj = {
             url_original: this.originalUrl,
-            url_identifier: this.identifier
+            url_identifier: this.identifier,
+            url_clickcount: this.clickcount
           }
         db.collection("urls").insertOne(myobj, function (err, res) {
           if (err) throw err;
