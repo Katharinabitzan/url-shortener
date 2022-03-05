@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Node URL Shortener</title>
+    <meta name="description" content="LittleURL is a webpage which can be used to shorten Long URLs. Please type in the URL that you would like to shorten as well as an optional identifier for your URL and you can create a small URL.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <base href="/">
+  </head>
+  <body>
+    <nav>
+      <div id="logo">
+        <a href="http://localhost:3000/">
+          <img src="/images/smallURL_logo.png" alt="alernate text" width="450px" height="250px">
+        </a>
+      </div>
+    </nav>
+    <section id="urlbox">
+      <h1>Enter the URL you would like to shorten:</h1>
+      <form action="/url" method="post">
+        <div id="formurl">
+          <input type="url" id="originalurl" name="originalurl" placeholder="https://example.com" pattern="[Hh][Tt][Tt][Pp][Ss]?:\/\/(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:\.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:\.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::\d{2,5})?(?:\/[^\s]*)?" required>
+          <label for="identifier">Optional identifier for your URL:</label>
+          <input type="text" id="identifier" name="identifier">
+          <div id="formbutton">
+            <input type="submit" value="Submit">
+          </div>
+        </div>
+      </form>
+    </section>
+    <section id="deleteurlbox">
+      <h2>Want to remove a URL you generated?</h2>
+      <a href="http://localhost:3000/url_delete">Click Here</a><br>
+    </section>
+  </body>
+</html>
