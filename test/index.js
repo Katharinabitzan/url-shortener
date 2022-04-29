@@ -1,6 +1,7 @@
 // index.js
 
 var express = require('express'); // (npm install --save express)
+var expect = require('chai').expect;
 
 // This is just for organisation and reporting
 describe('Our application', function() {
@@ -68,12 +69,19 @@ describe('Our application', function() {
 
 
 
-describe('Our application should.. in another way', function() {
-    it('should understand basic maths and fail when its wrong', function(){
-        //This test should pass
-        if ( 5 == 3) {
-            throw new Error("Oh no.");
-        }
-        // No error is thrown therefore test will pass
+describe('Our application should.. with chai and no callback (not async)', function() {
+    it('should understand basic maths', function(){
+        
+        expect(5).to.equal(5);
+        expect(5).to.not.equal(3);
+    });
+});
+
+describe('Our application should.. pass an async function', function() {
+    it('should understand basic maths', function(done){
+        
+        expect(5).to.equal(5);
+        expect(5).to.not.equal(3);
+        done()
     });
 });
