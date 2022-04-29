@@ -26,12 +26,8 @@ class Url {
         var httpsValid = this.originalUrl.match(httpsRegex)
     
         if (!httpValid && !httpsValid) {
-            console.log(httpValid)
-            console.log(httpsValid)
             return false
         } else {
-            console.log(httpValid)
-            console.log(httpsValid)
             return true
         }    
     }
@@ -52,7 +48,7 @@ class Url {
         let myobj = {
             url_original: this.originalUrl,
             url_identifier: this.identifier,
-            url_clickcount: this.clickcount
+            url_clickcount: 0
           }
         db.collection("urls").insertOne(myobj, function (err, res) {
           if (err) throw err;
@@ -60,10 +56,11 @@ class Url {
     }
 
     updateClickCount(id) {
-        console.log("updating url in DB")
+        console.log("updating url in DB, ID of url to update is: " + id)
         const db = getDb()
         const myQuery = {_id:ObjectId(id)}
         const clickIncremented = this.clickcount++
+        console.log("click incremented = " + clickIncremented)
         const newValues = {
             $set: {
                 url_clickcount: clickIncremented
@@ -73,7 +70,7 @@ class Url {
         .collection("urls")
         .updateOne(myQuery, newValues, function (err, res) {
           if (err) throw err;
-          console.log("1 url updated");
+          console.log("1 url updated after click");
           })
     }
 

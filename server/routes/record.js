@@ -82,7 +82,6 @@ recordRoutes.route('/url_delete').post(function(req, res){
 
 // Redirect by identifier
 recordRoutes.route('/identifier/:identifier').get( async function(req, res) {
-  console.log("Redirecting by identifier.")
   const identifier = req.params.identifier
   const db = dbo.getDb()
   const cursor = await db.collection("urls").find({ "url_identifier": identifier})
@@ -91,12 +90,14 @@ recordRoutes.route('/identifier/:identifier').get( async function(req, res) {
     res.send(`Your tinyUrl: http://localhost:3000/identifier/${identifier} doesnt seem to go anywhere!`)
   }
   else if (resultsArray[0].url_original) {
-    console.log(`id = ${resultsArray[0]._id}`)
-    console.log(resultsArray[0])
     // Update click count +1
+    console.log("before click count update: ")
+    console.log(resultsArray[0])
+    
     url.updateClickCount(resultsArray[0]._id)
-
     res.redirect(resultsArray[0].url_original)
+    console.log("after click count update: ")
+    console.log(resultsArray[0])
   }
   
 })
