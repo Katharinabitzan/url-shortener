@@ -1,4 +1,4 @@
-// index.js
+// index.js --- info from https://alexanderpaterson.com/posts/how-to-start-unit-testing-your-express-apps
 
 var express = require('express'); // (npm install --save express)
 var expect = require('chai').expect;
