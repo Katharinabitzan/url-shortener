@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "SET NODE_ENV=dev && node app.js",
+    "test": "mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,18 @@
   },
   "homepage": "https://github.com/Katharinabitzan/url-shortener#readme",
   "dependencies": {
+    "config": "^1.20.1",
     "ejs": "^3.1.6",
-    "express": "^4.17.1",
+    "express": "^4.18.0",
     "mongodb": "^4.2.0",
+    "mongoose": "^4.4.15",
+    "morgan": "^1.7.0",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "supertest": "^6.2.3"
   }
 }

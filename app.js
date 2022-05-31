@@ -1,6 +1,8 @@
-const path = require('path');
 const express = require("express");
 const app = express();
+const path = require('path');
+const morgan = require('morgan');
+const config = require('config');
 const port = 3000;
 
 // View Engine Setup

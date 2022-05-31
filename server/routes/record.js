@@ -79,6 +79,17 @@ recordRoutes.route('/url_delete').post(function(req, res){
   res.send(`Your tinyURL ${tinyUrl} has been successfully deleted and can be re-assigned`);
 })
 
+// // Get Stats Page
+// recordRoutes.route('/url_stats').get( async function(req, res){
+//   console.log("GET stats of a URL")
+
+//   const tinyUrl = req.body.tinyurl
+//   const identifier = tinyUrl.split("/").pop()
+//   const db = dbo.getDb();
+//   db.collection("urls").deleteOne({"url_identifier": identifier})
+//   res.send(`Your tinyURL ${tinyUrl} has been successfully deleted and can be re-assigned`);
+// })
+
 
 // Redirect by identifier
 recordRoutes.route('/identifier/:identifier').get( async function(req, res) {
